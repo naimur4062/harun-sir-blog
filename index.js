@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.mtqgx.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
-    console.log('err', err)
+    console.log('err', err);
     const adminsCollection = client.db("pad-blogs").collection("admin");
     const blogsCollection = client.db("pad-blogs").collection("blogs");
     const commentsCollection = client.db("pad-blogs").collection("comments");
@@ -90,6 +90,7 @@ client.connect(err => {
     // comment related code
     app.post('/postComment', (req, res) => {
         const newComment = req.body;
+        console.log(newComment)
         commentsCollection.insertOne(newComment)
             .then(result => {
                 res.send(result.insertedCount > 0)
@@ -97,7 +98,7 @@ client.connect(err => {
     });
 
     app.get('/comments', (req, res) => {
-        commentsCollection.find()
+        commentsCollection.find({})
             .toArray((err, items) => {
                 // console.log(items)
                 res.send(items)
